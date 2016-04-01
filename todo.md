@@ -15,3 +15,8 @@ help and guidance is appreciated.
 	All supported API methods should be added (see
 	https://github.com/paylike/node-api and
 	https://github.com/paylike/api-docs for a reference)
+
+- Test Windows support
+
+	I know there have been problems related to Windows not working with TLS
+	1.3 which can be fixed by setting a flag.
