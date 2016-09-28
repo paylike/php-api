@@ -1,6 +1,5 @@
 <?php
 namespace Paylike;
-
 /**
  * Class Adapter
  * @package Paylike
@@ -67,5 +66,6 @@ class Adapter {
             return false;
         }
     }
+
 
 }
