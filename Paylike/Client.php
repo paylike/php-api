@@ -1,6 +1,5 @@
 <?php
 namespace Paylike;
-
 include_once( 'Adapter.php' );
 include_once( 'Transaction.php' );
 
@@ -11,6 +10,7 @@ include_once( 'Transaction.php' );
  */
 class Client {
 
+
 	/**
 	 * @var
 	 * This is the adapter, similar to a db engine,
@@ -20,30 +20,33 @@ class Client {
 	 */
 	private static $adapter = null;
 
-	/**
-	 * @param $privateApiKey
-	 * Set the api key for future calls
-	 */
-	public static function setKey( $privateApiKey ) {
-		self::$adapter = new Adapter( $privateApiKey );
-	}
 
 	/**
-	 * @param null $privateApiKey
+	 * @param $private_api_key
+	 * Set the api key for future calls
+	 */
+	public static function setKey( $private_api_key ) {
+		self::$adapter = new Adapter( $private_api_key );
+	}
+
+
+	/**
+	 * @param null $private_api_key
 	 * Returns the object that will be responsible for making the calls to the api
 	 *
 	 * @return bool|null|Adapter
 	 */
-	public static function getAdapter( $privateApiKey = null ) {
+	public static function getAdapter( $private_api_key = null ) {
 		if ( self::$adapter ) {
 			return self::$adapter;
 		} else {
-			if ( $privateApiKey ) {
-				return new Adapter( $privateApiKey );
+			if ( $private_api_key ) {
+				return new Adapter( $private_api_key );
 			} else {
 				return false;
 			}
 		}
 	}
+
 
 }
