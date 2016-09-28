@@ -1,35 +1,35 @@
 <?php
 session_start();
-include_once( 'PaylikeApiWrapper/Paylike.php' );
+include_once( 'Paylike/Client.php' );
 $private_app_key = 'c0d3d84c-4ced-4f07-963f-f3e5b6196e75';
 $public_key      = '6bb16eb9-de0f-4224-9bc1-3d2b35b0bccd';
 $amount          = 5000; //cents;
 $currency        = 'GBP';
 if ( isset( $_POST['action'] ) ) {
-	\PaylikeApps\Paylike::setKey( $private_app_key );
+	\Paylike\Client::setKey( $private_app_key );
 	$transaction_id             = $_POST['transaction_id'];
 	$_SESSION['transaction_id'] = $transaction_id;
 	switch ( $_POST['action'] ) {
 		case "void_transaction_full":
-			$response = \PaylikeApps\Paylike::void( $transaction_id, $amount );
+			$response = \Paylike\Transaction::void( $transaction_id, $amount );
 			break;
 		case "void_transaction_half":
-			$response = \PaylikeApps\Paylike::void( $transaction_id, $amount / 2 );
+			$response = \Paylike\Transaction::void( $transaction_id, $amount / 2 );
 			break;
 		case "check_transaction_authorization":
-			$response = \PaylikeApps\Paylike::authorize( $transaction_id );
+			$response = \Paylike\Transaction::authorize( $transaction_id );
 			break;
 		case "capture_transaction_full":
-			$response = \PaylikeApps\Paylike::capture( $transaction_id, $amount, $currency );
+			$response = \Paylike\Transaction::capture( $transaction_id, $amount, $currency );
 			break;
 		case "capture_transaction_half":
-			$response = \PaylikeApps\Paylike::capture( $transaction_id, $amount / 2, $currency );
+			$response = \Paylike\Transaction::capture( $transaction_id, $amount / 2, $currency );
 			break;
 		case "refund_transaction_full":
-			$response = \PaylikeApps\Paylike::refund( $transaction_id, $amount, $_POST['reason'] );
+			$response = \Paylike\Transaction::refund( $transaction_id, $amount, $_POST['reason'] );
 			break;
 		case "refund_transaction_half":
-			$response = \PaylikeApps\Paylike::refund( $transaction_id, $amount / 2, $_POST['reason'] );
+			$response = \Paylike\Transaction::refund( $transaction_id, $amount / 2, $_POST['reason'] );
 			break;
 	}
 }
