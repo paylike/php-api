@@ -10,100 +10,86 @@ namespace Paylike;
 class Transaction {
 
 	/**
-	 * @param $transaction_id
+	 * @param $transactionId
 	 *
 	 * @return int|mixed
 	 * Return the transaction data
 	 *
 	 */
-	public static function fetch( $transaction_id ) {
+	public static function fetch( $transactionId ) {
 		$adapter = Client::getAdapter();
 		if ( ! $adapter ) {
 			return - 1;
 		}
 
-		return $adapter->request( 'transactions/' . $transaction_id );
-
+		return $adapter->request( 'transactions/' . $transactionId );
 	}
 
-
 	/**
-	 * @param $transaction_id
+	 * @param $transactionId
 	 * The authorization takes place via the client script,
 	 * so this actually returns the transaction data
 	 *
 	 * @return int|mixed
 	 */
-	public static function authorize( $transaction_id ) {
-		return self::fetch( $transaction_id );
+	public static function authorize( $transactionId ) {
+		return self::fetch( $transactionId );
 	}
 
-
 	/**
-	 * @param $transaction_id
-	 * @param $amount
-	 * @param $currency
-	 * @param string $description
+	 * @param $transactionId
 	 * Capture a transaction that has been authorized.
 	 * This also returns the transaction data.
 	 *
+	 * @param $data
+	 *
 	 * @return bool|int|mixed
 	 */
-	public static function capture( $transaction_id, $amount, $currency, $description = '' ) {
+	public static function capture( $transactionId, $data ) {
 		$adapter = Client::getAdapter();
 		if ( ! $adapter ) {
 			return - 1;
 		}
-		$data = array(
-			'amount'     => $amount,
-			'currency'   => $currency,
-			'descriptor' => $description
-		);
 
-		return $adapter->request( 'transactions/' . $transaction_id . '/captures', $data );
-
-
+		return $adapter->request( 'transactions/' . $transactionId . '/captures', $data );
 	}
 
-
 	/**
-	 * @param $transaction_id
-	 * @param $amount
+	 * @param $transactionId
 	 * You can void a certain amount of a transaction that
 	 * has been authorized but not captured.
 	 *
-	 * @return bool|int|mixed
-	 */
-	public static function void( $transaction_id, $amount ) {
-		$adapter = Client::getAdapter();
-		if ( ! $adapter ) {
-			return - 1;
-		}
-		$data = array(
-			'amount' => $amount,
-		);
-
-		return $adapter->request( 'transactions/' . $transaction_id . '/voids', $data );
-	}
-
-	/**
-	 * @param $transaction_id
-	 * @param $amount
-	 * You can return a certain amount of a transaction
-	 * that has been captured.
+	 * @param $data
 	 *
 	 * @return bool|int|mixed
 	 */
-	public static function refund( $transaction_id, $amount, $description = '' ) {
+	public static function void( $transactionId, $data ) {
 		$adapter = Client::getAdapter();
 		if ( ! $adapter ) {
 			return - 1;
 		}
-		$data = array(
-			'amount'     => $amount,
-			'descriptor' => $description
-		);
 
-		return $adapter->request( 'transactions/' . $transaction_id . '/refunds', $data );
+		return $adapter->request( 'transactions/' . $transactionId . '/voids', $data );
 	}
+
+	/**
+	 * @param $transactionId
+	 * You can return a certain amount of a transaction
+	 * that has been captured.
+	 *
+	 * @param $data
+	 *
+	 * @return bool|int|mixed
+	 */
+	public static function refund( $transactionId, $data ) {
+		$adapter = Client::getAdapter();
+		if ( ! $adapter ) {
+			return - 1;
+		}
+
+		return $adapter->request( 'transactions/' . $transactionId . '/refunds', $data );
+	}
+
+
+
 }
