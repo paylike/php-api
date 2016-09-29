@@ -12,51 +12,50 @@ namespace Paylike;
  */
 class Adapter {
 
-	public $api_url = 'https://api.paylike.io';
-	private $api_key;
+	public $apiUrl = 'https://api.paylike.io';
+	private $apiKey;
 
 	/**
 	 * Adapter constructor.
 	 *
-	 * @param $private_api_key
+	 * @param $privateApiKey
 	 */
-	public function __construct( $private_api_key ) {
-		$this->setApiKey( $private_api_key );
+	public function __construct( $privateApiKey ) {
+		$this->setApiKey( $privateApiKey );
 	}
-
 
 	/**
 	 * @param $key
 	 * set the api key.
 	 */
 	public function setApiKey( $key ) {
-		$this->api_key = $key;
+		$this->apiKey = $key;
 	}
 
 	/**
 	 * @param $url this is required, do not use the full url,
-	 * only prepend the params eg: transactions/' . $transaction_id . '/captures'
+	 * only prepend the params eg: transactions/' . $transactionId . '/captures'
 	 * @param $data this is optional
 	 * Actual call to the api via curl.
 	 *
 	 * @return bool|mixed
 	 */
 	public function request( $url, $data = null ) {
-		$url = $this->api_url . '/' . $url;
+		$url = $this->apiUrl . '/' . $url;
 		$ch  = curl_init();
 		curl_setopt( $ch, CURLOPT_URL, $url );
 		curl_setopt( $ch, CURLOPT_HEADER, false );
 		curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
-		curl_setopt( $ch, CURLOPT_USERPWD, ":" . $this->api_key );
+		curl_setopt( $ch, CURLOPT_USERPWD, ":" . $this->apiKey );
 		if ( $data ) {
 			curl_setopt( $ch, CURLOPT_POSTFIELDS, $data );
 		}
 		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
 		$result   = curl_exec( $ch );
-		$httpcode = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
+		$httpCode = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
 		curl_close( $ch );
 		$output = json_decode( $result, true );
-		if ( $httpcode >= 200 || $httpcode <= 299 ) {
+		if ( $httpCode >= 200 || $httpCode <= 299 ) {
 			return $output;
 		} else {
 			return false;

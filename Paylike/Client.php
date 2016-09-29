@@ -10,7 +10,6 @@ include_once( 'Transaction.php' );
  */
 class Client {
 
-
 	/**
 	 * @var
 	 * This is the adapter, similar to a db engine,
@@ -20,28 +19,26 @@ class Client {
 	 */
 	private static $adapter = null;
 
-
 	/**
-	 * @param $private_api_key
+	 * @param $privateApiKey
 	 * Set the api key for future calls
 	 */
-	public static function setKey( $private_api_key ) {
-		self::$adapter = new Adapter( $private_api_key );
+	public static function setKey( $privateApiKey ) {
+		self::$adapter = new Adapter( $privateApiKey );
 	}
 
-
 	/**
-	 * @param null $private_api_key
+	 * @param null $privateApiKey
 	 * Returns the object that will be responsible for making the calls to the api
 	 *
 	 * @return bool|null|Adapter
 	 */
-	public static function getAdapter( $private_api_key = null ) {
+	public static function getAdapter( $privateApiKey = null ) {
 		if ( self::$adapter ) {
 			return self::$adapter;
 		} else {
-			if ( $private_api_key ) {
-				return new Adapter( $private_api_key );
+			if ( $privateApiKey ) {
+				return new Adapter( $privateApiKey );
 			} else {
 				return false;
 			}

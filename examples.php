@@ -1,41 +1,57 @@
 <?php
 session_start();
 include_once( 'Paylike/Client.php' );
-$private_app_key = 'c0d3d84c-4ced-4f07-963f-f3e5b6196e75';
-$public_key      = '6bb16eb9-de0f-4224-9bc1-3d2b35b0bccd';
-$amount          = 5000; //cents;
-$currency        = 'GBP';
+$privateAppKey = 'c0d3d84c-4ced-4f07-963f-f3e5b6196e75';
+$publicKey     = '6bb16eb9-de0f-4224-9bc1-3d2b35b0bccd';
+$amount        = 5000; //cents;
+$currency      = 'GBP';
 if ( isset( $_POST['action'] ) ) {
-	\Paylike\Client::setKey( $private_app_key );
-	$transaction_id             = $_POST['transaction_id'];
-	$_SESSION['transaction_id'] = $transaction_id;
+	\Paylike\Client::setKey( $privateAppKey );
+	$transactionId             = $_POST['transactionId'];
+	$_SESSION['transactionId'] = $transactionId;
 	switch ( $_POST['action'] ) {
-		case "void_transaction_full":
-			$response = \Paylike\Transaction::void( $transaction_id, $amount );
+		case "voidTransactionFull":
+			$response = \Paylike\Transaction::void( $transactionId, array( 'amount' => $amount ) );
 			break;
-		case "void_transaction_half":
-			$response = \Paylike\Transaction::void( $transaction_id, $amount / 2 );
+		case "voidTransactionHalf":
+			$response = \Paylike\Transaction::void( $transactionId, array( 'amount' => $amount / 2 ) );
 			break;
-		case "check_transaction_authorization":
-			$response = \Paylike\Transaction::authorize( $transaction_id );
+		case "checkTransactionAuthorization":
+			$response = \Paylike\Transaction::authorize( $transactionId );
 			break;
-		case "capture_transaction_full":
-			$response = \Paylike\Transaction::capture( $transaction_id, $amount, $currency );
+		case "captureTransactionFull":
+			$data     = array(
+				'amount'   => $amount / 2,
+				'currency' => $currency
+			);
+			$response = \Paylike\Transaction::capture( $transactionId, $data );
 			break;
-		case "capture_transaction_half":
-			$response = \Paylike\Transaction::capture( $transaction_id, $amount / 2, $currency );
+		case "captureTransactionHalf":
+			$data     = array(
+				'amount'   => $amount / 2,
+				'currency' => $currency
+			);
+			$response = \Paylike\Transaction::capture( $transactionId, $data );
 			break;
-		case "refund_transaction_full":
-			$response = \Paylike\Transaction::refund( $transaction_id, $amount, $_POST['reason'] );
+		case "refundTransactionFull":
+			$data     = array(
+				'amount'     => $amount,
+				'descriptor' => $_POST['reason']
+			);
+			$response = \Paylike\Transaction::refund( $transactionId, $data );
 			break;
-		case "refund_transaction_half":
-			$response = \Paylike\Transaction::refund( $transaction_id, $amount / 2, $_POST['reason'] );
+		case "refundTransactionHalf":
+			$data     = array(
+				'amount'     => $amount / 2,
+				'descriptor' => $_POST['reason']
+			);
+			$response = \Paylike\Transaction::refund( $transactionId, $data );
 			break;
 	}
 }
-if ( ! isset( $transaction_id ) ) {
-	if ( isset( $_SESSION['transaction_id'] ) ) {
-		$transaction_id = $_SESSION['transaction_id'];
+if ( ! isset( $transactionId ) ) {
+	if ( isset( $_SESSION['transactionId'] ) ) {
+		$transactionId = $_SESSION['transactionId'];
 	}
 }
 ?>
@@ -67,7 +83,7 @@ if ( isset( $response ) ) {
 <script src="https://sdk.paylike.io/3.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script>
-	var paylike = Paylike('<?php echo $public_key ;?>');
+	var paylike = Paylike('<?php echo $publicKey ;?>');
 
 	function pay() {
 
@@ -83,7 +99,7 @@ if ( isset( $response ) ) {
 			if (err)
 				return console.warn(err);
 			var trxid = res.transaction.id;
-			jQuery(".transaction_id").val(trxid);
+			jQuery(".transactionId").val(trxid);
 		});
 	}
 </script>
@@ -96,10 +112,10 @@ if ( isset( $response ) ) {
 	<label>
 		Transaction id
 	</label>
-	<input type="text" name="transaction_id" <?php if ( isset( $transaction_id ) ) {
-		echo 'value="' . $transaction_id . '"';
-	} ?> class="transaction_id">
-	<input type="hidden" name="action" value="void_transaction_full">
+	<input type="text" name="transactionId" <?php if ( isset( $transactionId ) ) {
+		echo 'value="' . $transactionId . '"';
+	} ?> class="transactionId">
+	<input type="hidden" name="action" value="voidTransactionFull">
 	<input type="submit" value="Test Void"/>
 </form>
 <br/>
@@ -111,10 +127,10 @@ if ( isset( $response ) ) {
 	<label>
 		Transaction id
 	</label>
-	<input type="text" name="transaction_id" <?php if ( isset( $transaction_id ) ) {
-		echo 'value="' . $transaction_id . '"';
-	} ?> class="transaction_id">
-	<input type="hidden" name="action" value="void_transaction_half">
+	<input type="text" name="transactionId" <?php if ( isset( $transactionId ) ) {
+		echo 'value="' . $transactionId . '"';
+	} ?> class="transactionId">
+	<input type="hidden" name="action" value="voidTransactionHalf">
 	<input type="submit" value="Test Void"/>
 </form>
 <br/>
@@ -126,10 +142,10 @@ if ( isset( $response ) ) {
 	<label>
 		Transaction id
 	</label>
-	<input type="text" name="transaction_id" <?php if ( isset( $transaction_id ) ) {
-		echo 'value="' . $transaction_id . '"';
-	} ?> class="transaction_id">
-	<input type="hidden" name="action" value="check_transaction_authorization">
+	<input type="text" name="transactionId" <?php if ( isset( $transactionId ) ) {
+		echo 'value="' . $transactionId . '"';
+	} ?> class="transactionId">
+	<input type="hidden" name="action" value="checkTransactionAuthorization">
 	<input type="submit" value="Test Authorization"/>
 </form>
 <br/>
@@ -141,10 +157,10 @@ if ( isset( $response ) ) {
 	<label>
 		Transaction id
 	</label>
-	<input type="text" name="transaction_id" <?php if ( isset( $transaction_id ) ) {
-		echo 'value="' . $transaction_id . '"';
-	} ?> class="transaction_id">
-	<input type="hidden" name="action" value="capture_transaction_full">
+	<input type="text" name="transactionId" <?php if ( isset( $transactionId ) ) {
+		echo 'value="' . $transactionId . '"';
+	} ?> class="transactionId">
+	<input type="hidden" name="action" value="captureTransactionFull">
 	<input type="submit" value="Test Capture"/>
 </form>
 <br/>
@@ -156,10 +172,10 @@ if ( isset( $response ) ) {
 	<label>
 		Transaction id
 	</label>
-	<input type="text" name="transaction_id" <?php if ( isset( $transaction_id ) ) {
-		echo 'value="' . $transaction_id . '"';
-	} ?> class="transaction_id">
-	<input type="hidden" name="action" value="capture_transaction_half">
+	<input type="text" name="transactionId" <?php if ( isset( $transactionId ) ) {
+		echo 'value="' . $transactionId . '"';
+	} ?> class="transactionId">
+	<input type="hidden" name="action" value="captureTransactionHalf">
 	<input type="submit" value="Test Capture"/>
 </form>
 <form method="POST">
@@ -173,14 +189,14 @@ if ( isset( $response ) ) {
 	<label>
 		Transaction id
 	</label>
-	<input type="text" name="transaction_id" <?php if ( isset( $transaction_id ) ) {
-		echo 'value="' . $transaction_id . '"';
-	} ?> class="transaction_id"><br/>
+	<input type="text" name="transactionId" <?php if ( isset( $transactionId ) ) {
+		echo 'value="' . $transactionId . '"';
+	} ?> class="transactionId"><br/>
 	<label>
 		Reason for the refund(optional)
 	</label>
 	<input type="text" name="reason">
-	<input type="hidden" name="action" value="refund_transaction_full">
+	<input type="hidden" name="action" value="refundTransactionFull">
 	<input type="submit" value="Test Refund"/>
 </form>
 <br/>
@@ -196,14 +212,14 @@ if ( isset( $response ) ) {
 	<label>
 		Transaction id
 	</label>
-	<input type="text" name="transaction_id" <?php if ( isset( $transaction_id ) ) {
-		echo 'value="' . $transaction_id . '"';
-	} ?> class="transaction_id"><br/>
+	<input type="text" name="transactionId" <?php if ( isset( $transactionId ) ) {
+		echo 'value="' . $transactionId . '"';
+	} ?> class="transactionId"><br/>
 	<label>
 		Reason for the refund(optional)
 	</label>
 	<input type="text" name="reason">
-	<input type="hidden" name="action" value="refund_transaction_half">
+	<input type="hidden" name="action" value="refundTransactionHalf">
 	<input type="submit" value="Test Refund"/>
 </form>
 </body>
