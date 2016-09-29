@@ -16,8 +16,8 @@ if ( isset( $_POST['action'] ) ) {
 		case "voidTransactionHalf":
 			$response = \Paylike\Transaction::void( $transactionId, array( 'amount' => $amount / 2 ) );
 			break;
-		case "checkTransactionAuthorization":
-			$response = \Paylike\Transaction::authorize( $transactionId );
+		case "fetchTransaction":
+			$response = \Paylike\Transaction::fetch( $transactionId );
 			break;
 		case "captureTransactionFull":
 			$data     = array(
@@ -137,7 +137,7 @@ if ( isset( $response ) ) {
 
 <form method="POST">
 	<h4>
-		Check authorization
+		Fetch transaction.
 	</h4>
 	<label>
 		Transaction id
