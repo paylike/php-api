@@ -1,6 +1,5 @@
 <?php
 namespace Paylike;
-
 /**
  * Class Transaction
  * @package Paylike
@@ -20,10 +19,21 @@ class Transaction {
 	public static function fetch( $transactionId ) {
 		$adapter = Client::getAdapter();
 		if ( ! $adapter ) {
-            trigger_error('Adapter not set!',E_USER_ERROR);
+			return - 1;
 		}
 
 		return $adapter->request( 'transactions/' . $transactionId );
+	}
+
+	/**
+	 * @param $transactionId
+	 * The authorization takes place via the client script,
+	 * so this actually returns the transaction data
+	 *
+	 * @return int|mixed
+	 */
+	public static function authorize( $transactionId ) {
+		return self::fetch( $transactionId );
 	}
 
 	/**
@@ -38,7 +48,7 @@ class Transaction {
 	public static function capture( $transactionId, $data ) {
 		$adapter = Client::getAdapter();
 		if ( ! $adapter ) {
-            trigger_error('Adapter not set!',E_USER_ERROR);
+			return - 1;
 		}
 
 		return $adapter->request( 'transactions/' . $transactionId . '/captures', $data );
@@ -56,8 +66,9 @@ class Transaction {
 	public static function void( $transactionId, $data ) {
 		$adapter = Client::getAdapter();
 		if ( ! $adapter ) {
-            trigger_error('Adapter not set!',E_USER_ERROR);
+			return - 1;
 		}
+
 		return $adapter->request( 'transactions/' . $transactionId . '/voids', $data );
 	}
 
@@ -73,10 +84,12 @@ class Transaction {
 	public static function refund( $transactionId, $data ) {
 		$adapter = Client::getAdapter();
 		if ( ! $adapter ) {
-            trigger_error('Adapter not set!',E_USER_ERROR);
+			return - 1;
 		}
 
 		return $adapter->request( 'transactions/' . $transactionId . '/refunds', $data );
 	}
+
+
 
 }

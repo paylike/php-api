@@ -1,6 +1,5 @@
 <?php
 namespace Paylike;
-
 include_once( 'Adapter.php' );
 include_once( 'Transaction.php' );
 
@@ -45,5 +44,6 @@ class Client {
 			}
 		}
 	}
+
 
 }
