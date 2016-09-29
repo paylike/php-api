@@ -19,12 +19,12 @@ class Transaction {
 	public static function fetch( $transactionId ) {
 		$adapter = Client::getAdapter();
 		if ( ! $adapter ) {
-			return - 1;
+            trigger_error('Adapter not set!',E_USER_ERROR);
 		}
 
 		return $adapter->request( 'transactions/' . $transactionId );
 	}
-    
+
 
 	/**
 	 * @param $transactionId
@@ -38,7 +38,7 @@ class Transaction {
 	public static function capture( $transactionId, $data ) {
 		$adapter = Client::getAdapter();
 		if ( ! $adapter ) {
-			return - 1;
+            trigger_error('Adapter not set!',E_USER_ERROR);
 		}
 
 		return $adapter->request( 'transactions/' . $transactionId . '/captures', $data );
@@ -56,9 +56,8 @@ class Transaction {
 	public static function void( $transactionId, $data ) {
 		$adapter = Client::getAdapter();
 		if ( ! $adapter ) {
-			return - 1;
+            trigger_error('Adapter not set!',E_USER_ERROR);
 		}
-
 		return $adapter->request( 'transactions/' . $transactionId . '/voids', $data );
 	}
 
@@ -74,7 +73,7 @@ class Transaction {
 	public static function refund( $transactionId, $data ) {
 		$adapter = Client::getAdapter();
 		if ( ! $adapter ) {
-			return - 1;
+            trigger_error('Adapter not set!',E_USER_ERROR);
 		}
 
 		return $adapter->request( 'transactions/' . $transactionId . '/refunds', $data );
