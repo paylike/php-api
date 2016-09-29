@@ -24,17 +24,7 @@ class Transaction {
 
 		return $adapter->request( 'transactions/' . $transactionId );
 	}
-
-	/**
-	 * @param $transactionId
-	 * The authorization takes place via the client script,
-	 * so this actually returns the transaction data
-	 *
-	 * @return int|mixed
-	 */
-	public static function authorize( $transactionId ) {
-		return self::fetch( $transactionId );
-	}
+    
 
 	/**
 	 * @param $transactionId
