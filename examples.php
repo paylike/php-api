@@ -142,8 +142,8 @@ if ( isset( $response ) ) {
     <input type="text" name="transactionId" <?php if ( isset( $transactionId ) ) {
         echo 'value="' . $transactionId . '"';
     } ?> class="transactionId">
-    <input type="hidden" name="action" value="checkTransactionAuthorization">
-    <input type="submit" value="Test Authorization"/>
+    <input type="hidden" name="action" value="fetchTransaction">
+    <input type="submit" value="Test Transaction fetch"/>
 </form>
 <br/>
 <form method="POST">
