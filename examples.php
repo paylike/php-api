@@ -199,7 +199,7 @@ if ( isset( $response ) ) {
 <br/>
 <form method="POST">
     <h4>
-        Capture the transaction for the half of the amount
+        Refund the transaction for the half of the amount
         <br/>
         <small><i>
                 Only works when you have previously captured the amount.
