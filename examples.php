@@ -11,10 +11,12 @@ if ( isset( $_POST['action'] ) ) {
     $_SESSION['transactionId'] = $transactionId;
     switch ( $_POST['action'] ) {
         case "voidTransactionFull":
-            $response = \Paylike\Transaction::void( $transactionId, array( 'amount' => $amount ) );
+            $data     = array( 'amount' => $amount );
+            $response = \Paylike\Transaction::void( $transactionId, $data );
             break;
         case "voidTransactionHalf":
-            $response = \Paylike\Transaction::void( $transactionId, array( 'amount' => $amount / 2 ) );
+            $data     = array( 'amount' => $amount / 2 );
+            $response = \Paylike\Transaction::void( $transactionId, array( 'amount' => $data) );
             break;
         case "fetchTransaction":
             $response = \Paylike\Transaction::fetch( $transactionId );
@@ -197,7 +199,7 @@ if ( isset( $response ) ) {
 <br/>
 <form method="POST">
     <h4>
-        Capture the transaction for the half of the amount
+        Refund the transaction for the half of the amount
         <br/>
         <small><i>
                 Only works when you have previously captured the amount.
