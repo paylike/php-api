@@ -13,6 +13,7 @@ This is the PHP wrapper for the Paylike [sdk](https://github.com/paylike/sdk)
 	- [Refund a transaction](#refund-a-transaction)
 	- [Void a transaction](#void-a-transaction)
 	- [Fetch a transaction](#fetch-a-transaction)
+	- [Create a transaction](#create-a-transaction)
 
 ## Getting an API key
 
@@ -42,14 +43,12 @@ $privateAppKey = 'your-private-key-goes-here';
 **Every operation requires a transaction id that is obtained by using the javascript [sdk](https://github.com/paylike/sdk).**
 
 ```php
-
 	 $data     = array(
                     'amount'   => $amount,      //value must be in cents 
                     'currency' => $currency     //see available formats https://github.com/paylike/currencies
                 );
      $transaction = \Paylike\Transaction::capture( $transactionId, $data );
 	// you will now have the transaction data in the $transaction variable.
-	
 ```
 
 
@@ -85,4 +84,26 @@ $privateAppKey = 'your-private-key-goes-here';
 ```php
 	$transaction = \Paylike\Transaction::fetch( $transactionId);
 	// you will now have the transaction data in the $transaction variable.
+```
+
+## Create a transaction
+**Every operation requires a transaction id that is obtained by using the javascript [sdk](https://github.com/paylike/sdk).**
+
+
+```php
+	 $data     = array(
+                    'amount'   => $amount,      //value must be in cents 
+                    'currency' => $currency     //see available formats https://github.com/paylike/currencies
+                );
+     $transaction = \Paylike\Transaction::create( $transactionId, $data );
+	// you will now have the transaction data in the $transaction variable.
+```
+
+## Fetch a card
+**Every operation requires a card id that is obtained by using the javascript [sdk](https://github.com/paylike/sdk).**
+
+
+```php
+	$card = \Paylike\Card::fetch( $cardId );
+	// you will now have the card data in the $card variable.
 ```

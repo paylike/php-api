@@ -1,6 +1,5 @@
 <?php
 namespace Paylike;
-
 /**
  * Class Adapter
  * @package Paylike
@@ -11,7 +10,7 @@ namespace Paylike;
  *
  * @version    1.0.0
  */
-if(!class_exists('Paylike\\Adapter')) {
+if ( ! class_exists( 'Paylike\\Adapter' ) ) {
     class Adapter {
 
         public $apiUrl = 'https://api.paylike.io';
@@ -48,17 +47,25 @@ if(!class_exists('Paylike\\Adapter')) {
          *
          * @return bool|mixed
          */
-        public function request( $url, $data = null ) {
+        public function request( $url, $data = null, $httpVerb = 'post' ) {
             $url = $this->apiUrl . '/' . $url;
-            $ch  = curl_init();
+            $ch = curl_init();
             curl_setopt( $ch, CURLOPT_URL, $url );
             curl_setopt( $ch, CURLOPT_HEADER, false );
             curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
             curl_setopt( $ch, CURLOPT_USERPWD, ":" . $this->apiKey );
-            if ( $data ) {
-                curl_setopt( $ch, CURLOPT_POSTFIELDS, $data );
-            }
             curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+            switch ( $httpVerb ) {
+                case 'post':
+                    curl_setopt( $ch, CURLOPT_POST, true );
+                    if ( $data ) {
+                        curl_setopt( $ch, CURLOPT_POSTFIELDS, $data );
+                    }
+                    break;
+                case 'get':
+                    // can add args here for future use
+                    break;
+            }
             $result   = curl_exec( $ch );
             $httpCode = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
             curl_close( $ch );

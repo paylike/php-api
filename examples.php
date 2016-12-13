@@ -7,8 +7,15 @@ $amount        = 5000; //cents;
 $currency      = 'GBP';
 if ( isset( $_POST['action'] ) ) {
     \Paylike\Client::setKey( $privateAppKey );
-    $transactionId             = $_POST['transactionId'];
-    $_SESSION['transactionId'] = $transactionId;
+    $transactionId = $cardId = null;
+    if ( isset( $_POST['transactionId'] ) ) {
+        $transactionId             = $_POST['transactionId'];
+        $_SESSION['transactionId'] = $transactionId;
+    }
+    if ( isset( $_POST['cardId'] ) ) {
+        $cardId             = $_POST['cardId'];
+        $_SESSION['cardId'] = $cardId;
+    }
     switch ( $_POST['action'] ) {
         case "voidTransactionFull":
             $data     = array( 'amount' => $amount );
@@ -17,6 +24,15 @@ if ( isset( $_POST['action'] ) ) {
         case "voidTransactionHalf":
             $data     = array( 'amount' => $amount / 2 );
             $response = \Paylike\Transaction::void( $transactionId, array( 'amount' => $data ) );
+            break;
+        case "createTransaction":
+            $transaction = \Paylike\Transaction::fetch( $transactionId );
+            $merchantId  = $transaction['merchantId'];
+            $data        = array(
+                'amount'   => $amount,
+                'currency' => $currency
+            );
+            $response    = \Paylike\Transaction::create( $merchantId, $data );
             break;
         case "fetchTransaction":
             $response = \Paylike\Transaction::fetch( $transactionId );
@@ -49,11 +65,19 @@ if ( isset( $_POST['action'] ) ) {
             );
             $response = \Paylike\Transaction::refund( $transactionId, $data );
             break;
+        case "fetchCard":
+            $response = \Paylike\Card::fetch( $cardId );
+            break;
     }
 }
 if ( ! isset( $transactionId ) ) {
     if ( isset( $_SESSION['transactionId'] ) ) {
         $transactionId = $_SESSION['transactionId'];
+    }
+}
+if ( ! isset( $cardId ) ) {
+    if ( isset( $_SESSION['cardId'] ) ) {
+        $cardId = $_SESSION['cardId'];
     }
 }
 ?>
@@ -73,15 +97,24 @@ if ( isset( $response ) ) {
     echo '<div id="result"><pre>';
     print_r( $response );
     echo '</pre>';
-    if ( isset( $response['transaction']['successful'] ) && $response['transaction']['successful'] ) {
-        echo '<div style="color:rgb(69, 110, 16)">Operation was successful.</div>';
+    if ( isset( $_POST['cardId'] ) ) {
+        if ( isset( $response['card']['id'] ) && $response['card']['id'] ) {
+            echo '<div style="color:rgb(69, 110, 16)">Card operation was successful.</div>';
+        } else {
+            echo '<div style="color:#fe171d">Card operation failed.</div>';
+        }
     } else {
-        echo '<div style="color:#fe171d">Operation failed.</div>';
+        if ( isset( $response['transaction']['successful'] ) && $response['transaction']['successful'] ) {
+            echo '<div style="color:rgb(69, 110, 16)">Transaction operation was successful.</div>';
+        } else {
+            echo '<div style="color:#fe171d">Transaction operation failed.</div>';
+        }
     }
     echo '</div>';
 }
 ?>
 <button onclick="pay();">Get transaction id</button>
+<button onclick="tokenize();">Get card id</button>
 <script src="https://sdk.paylike.io/3.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script>
@@ -95,13 +128,29 @@ if ( isset( $response ) ) {
             amount: <?php echo $amount; ?>,
             custom: {
                 orderNo: 'Test Order',
-                email: 'ionut@derikon.com',
-            },
+                email: 'ionut@derikon.com'
+            }
         }, function (err, res) {
             if (err)
                 return console.warn(err);
             var trxid = res.transaction.id;
             jQuery(".transactionId").val(trxid);
+        });
+    }
+
+    function tokenize() {
+
+        paylike.popup({
+            title: 'Testing the card tokenize',
+            custom: {
+                orderNo: 'Test Order',
+                email: 'ionut@derikon.com'
+            }
+        }, function (err, res) {
+            if (err)
+                return console.warn(err);
+            var crxid = res.card.id;
+            jQuery(".cardId").val(crxid);
         });
     }
 </script>
@@ -132,6 +181,20 @@ if ( isset( $response ) ) {
     } ?> class="transactionId">
     <input type="hidden" name="action" value="voidTransactionHalf">
     <input type="submit" value="Test Void"/>
+</form>
+<br/>
+<form method="POST">
+    <h4>
+        Create a new transaction based on a previous one.
+    </h4>
+    <label>
+        Transaction id
+    </label>
+    <input type="text" name="transactionId" <?php if ( isset( $transactionId ) ) {
+        echo 'value="' . $transactionId . '"';
+    } ?> class="transactionId">
+    <input type="hidden" name="action" value="createTransaction">
+    <input type="submit" value="Test Transaction create"/>
 </form>
 <br/>
 <form method="POST">
@@ -217,6 +280,20 @@ if ( isset( $response ) ) {
     <input type="text" name="reason">
     <input type="hidden" name="action" value="refundTransactionHalf">
     <input type="submit" value="Test Refund"/>
+</form>
+<br/>
+<form method="POST">
+    <h4>
+        Fetch card.
+    </h4>
+    <label>
+        Card id
+    </label>
+    <input type="text" name="cardId" <?php if ( isset( $cardId ) ) {
+        echo 'value="' . $cardId . '"';
+    } ?> class="cardId">
+    <input type="hidden" name="action" value="fetchCard">
+    <input type="submit" value="Test Card fetch"/>
 </form>
 </body>
 </html>
