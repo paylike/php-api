@@ -1,15 +1,14 @@
 <?php
 namespace Paylike;
-
 include_once( 'Adapter.php' );
 include_once( 'Transaction.php' );
-
+include_once( 'Card.php' );
 /**
  * Class Client
  * @package Paylike
  * Manages the app creation.
  */
-if(!class_exists('Paylike\\Client')) {
+if ( ! class_exists( 'Paylike\\Client' ) ) {
     class Client {
 
         /**

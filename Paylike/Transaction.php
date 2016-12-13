@@ -1,6 +1,5 @@
 <?php
 namespace Paylike;
-
 /**
  * Class Transaction
  * @package Paylike
@@ -8,8 +7,29 @@ namespace Paylike;
  *
  * @version    1.0.0
  */
-if(!class_exists('Paylike\\Transaction')) {
+if ( ! class_exists( 'Paylike\\Transaction' ) ) {
     class Transaction {
+
+
+        /**
+         * Creates a transaction based on a
+         * previous transaction
+         *
+         * @link https://github.com/paylike/api-docs#create-a-transaction
+         *
+         * @param $merchantId
+         * @param $data
+         *
+         * @return bool|mixed
+         */
+        public static function create( $merchantId, $data ) {
+            $adapter = Client::getAdapter();
+            if ( ! $adapter ) {
+                trigger_error( 'Adapter not set!', E_USER_ERROR );
+            }
+
+            return $adapter->request( 'merchants/' . $merchantId . '/transactions', $data );
+        }
 
         /**
          * @param $transactionId
