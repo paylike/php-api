@@ -14,6 +14,7 @@ This is the PHP wrapper for the Paylike [sdk](https://github.com/paylike/sdk)
 	- [Void a transaction](#void-a-transaction)
 	- [Fetch a transaction](#fetch-a-transaction)
 	- [Create a transaction](#create-a-transaction)
+	- [Fetch a card](#fetch-a-card)
 
 ## Getting an API key
 
