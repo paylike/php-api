@@ -27,10 +27,14 @@ if ( isset( $_POST['action'] ) ) {
             break;
         case "createTransaction":
             $transaction = \Paylike\Transaction::fetch( $transactionId );
-            $merchantId  = $transaction['merchantId'];
+            $merchantId  = $transaction['transaction']['merchantId'];
             $data        = array(
-                'amount'   => $amount,
-                'currency' => $currency
+                'transactionId' => $transactionId,
+                'amount'        => $amount,
+                'currency'      => $currency,
+                'custom'        => array(
+                    'email' => 'ionut@derikon.com'
+                )
             );
             $response    = \Paylike\Transaction::create( $merchantId, $data );
             break;
@@ -104,7 +108,7 @@ if ( isset( $response ) ) {
             echo '<div style="color:#fe171d">Card operation failed.</div>';
         }
     } else {
-        if ( isset( $response['transaction']['successful'] ) && $response['transaction']['successful'] ) {
+        if ( isset( $response['transaction']['id'] ) && $response['transaction']['id'] ) {
             echo '<div style="color:rgb(69, 110, 16)">Transaction operation was successful.</div>';
         } else {
             echo '<div style="color:#fe171d">Transaction operation failed.</div>';
