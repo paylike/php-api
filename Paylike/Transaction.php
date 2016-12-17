@@ -44,7 +44,7 @@ if ( ! class_exists( 'Paylike\\Transaction' ) ) {
                 trigger_error( 'Adapter not set!', E_USER_ERROR );
             }
 
-            return $adapter->request( 'transactions/' . $transactionId );
+            return $adapter->request( 'transactions/' . $transactionId, $data = null, $httpVerb = 'get' );
         }
 
         /**

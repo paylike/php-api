@@ -52,6 +52,10 @@ if ( ! class_exists( 'Paylike\\Adapter' ) ) {
             $ch = curl_init();
             curl_setopt( $ch, CURLOPT_URL, $url );
             curl_setopt( $ch, CURLOPT_HEADER, false );
+            curl_setopt( $ch, CURLOPT_HTTPHEADER, array(
+                'Accept: application/json',
+                'Content-Type: application/json'
+            ) );
             curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
             curl_setopt( $ch, CURLOPT_USERPWD, ":" . $this->apiKey );
             curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
@@ -59,7 +63,8 @@ if ( ! class_exists( 'Paylike\\Adapter' ) ) {
                 case 'post':
                     curl_setopt( $ch, CURLOPT_POST, true );
                     if ( $data ) {
-                        curl_setopt( $ch, CURLOPT_POSTFIELDS, $data );
+                        $encoded = json_encode($data);
+                        curl_setopt( $ch, CURLOPT_POSTFIELDS, $encoded );
                     }
                     break;
                 case 'get':
