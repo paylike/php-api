@@ -57,6 +57,7 @@ if ( ! class_exists( 'Paylike\\Adapter' ) ) {
                 'Content-Type: application/json'
             ) );
             curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
+            curl_setopt( $ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2 );
             curl_setopt( $ch, CURLOPT_USERPWD, ":" . $this->apiKey );
             curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
             switch ( $httpVerb ) {
