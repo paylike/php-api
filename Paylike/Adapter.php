@@ -10,8 +10,9 @@ namespace Paylike;
  *
  * @version    1.0.0
  */
-if ( ! class_exists( 'Paylike\\Adapter' ) ) {
-    class Adapter {
+if (!class_exists('Paylike\\Adapter')) {
+    class Adapter
+    {
 
         public $apiUrl = 'https://api.paylike.io';
         private $apiKey;
@@ -21,11 +22,12 @@ if ( ! class_exists( 'Paylike\\Adapter' ) ) {
          *
          * @param $privateApiKey
          */
-        public function __construct( $privateApiKey ) {
-            if ( $privateApiKey ) {
-                $this->setApiKey( $privateApiKey );
+        public function __construct($privateApiKey)
+        {
+            if ($privateApiKey) {
+                $this->setApiKey($privateApiKey);
             } else {
-                trigger_error( 'Private Key is missing!', E_USER_ERROR );
+                trigger_error('Private Key is missing!', E_USER_ERROR);
 
                 return null;
             }
@@ -35,7 +37,8 @@ if ( ! class_exists( 'Paylike\\Adapter' ) ) {
          * @param $key
          * set the api key.
          */
-        public function setApiKey( $key ) {
+        public function setApiKey($key)
+        {
             $this->apiKey = $key;
         }
 
@@ -47,35 +50,37 @@ if ( ! class_exists( 'Paylike\\Adapter' ) ) {
          *
          * @return bool|mixed
          */
-        public function request( $url, $data = null, $httpVerb = 'post' ) {
+        public function request($url, $data = null, $httpVerb = 'post')
+        {
             $url = $this->apiUrl . '/' . $url;
             $ch = curl_init();
-            curl_setopt( $ch, CURLOPT_URL, $url );
-            curl_setopt( $ch, CURLOPT_HEADER, false );
-            curl_setopt( $ch, CURLOPT_HTTPHEADER, array(
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_HEADER, false);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
                 'Accept: application/json',
-                'Content-Type: application/json'
-            ) );
-            curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
-            curl_setopt( $ch, CURLOPT_USERPWD, ":" . $this->apiKey );
-            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-            switch ( $httpVerb ) {
+                'Content-Type: application/json',
+                'X-Client: PHP ' . phpversion()
+            ));
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_USERPWD, ":" . $this->apiKey);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            switch ($httpVerb) {
                 case 'post':
-                    curl_setopt( $ch, CURLOPT_POST, true );
-                    if ( $data ) {
+                    curl_setopt($ch, CURLOPT_POST, true);
+                    if ($data) {
                         $encoded = json_encode($data);
-                        curl_setopt( $ch, CURLOPT_POSTFIELDS, $encoded );
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, $encoded);
                     }
                     break;
                 case 'get':
                     // can add args here for future use
                     break;
             }
-            $result   = curl_exec( $ch );
-            $httpCode = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
-            curl_close( $ch );
-            $output = json_decode( $result, true );
-            if ( $httpCode >= 200 && $httpCode <= 299 ) {
+            $result = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            $output = json_decode($result, true);
+            if ($httpCode >= 200 && $httpCode <= 299) {
                 return $output;
             } else {
                 return false;
