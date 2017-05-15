@@ -75,7 +75,7 @@ if ( ! class_exists( 'Paylike\\Adapter' ) ) {
             $httpCode = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
             curl_close( $ch );
             $output = json_decode( $result, true );
-            if ( $httpCode >= 200 || $httpCode <= 299 ) {
+            if ( $httpCode >= 200 && $httpCode <= 299 ) {
                 return $output;
             } else {
                 return false;
