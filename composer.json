@@ -1,0 +1,25 @@
+{
+  "name": "paylike/php-api",
+  "description": "Demo",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ionut Calara",
+      "email": "ionut@derikon.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": {
+      "Paylike\\": "src",
+      "Paylike\\Tests\\": "tests"
+    }
+  },
+  "require": {
+    "php": ">=5.3",
+    "ext-curl": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.8"
+  }
+}

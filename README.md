@@ -1,110 +1,127 @@
-# Paylike PHP Api Wrapper
+# Paylike client (PHP)
 
-This is the PHP wrapper for the Paylike [sdk](https://github.com/paylike/sdk)
-
-[Sign up for a free merchant account (free and instant)](https://paylike.io)
-
-- Table of contents
-	- [Getting an API key](#getting-an-api-key)
-	- [Requirements](#requirements)
-	- [Examples](#examples)
-	- [Getting started](#getting-started)
-	- [Capturing a transaction](#capturing-a-transaction)
-	- [Refund a transaction](#refund-a-transaction)
-	- [Void a transaction](#void-a-transaction)
-	- [Fetch a transaction](#fetch-a-transaction)
-	- [Create a transaction](#create-a-transaction)
-	- [Fetch a card](#fetch-a-card)
+You can sign up for a Paylike account at [https://paylike.io](https://paylike.io).
 
 ## Getting an API key
 
 An API key can be obtained by creating a merchant and adding an app through
-our [dashboard](https://app.paylike.io). 
+Paylike [dashboard](https://app.paylike.io). 
 
 ## Requirements
 
 PHP 5.3.3 and later.
 
-## Examples
+## Install
 
-Examples are available in the `examples.php` file. 
+You can install the package via [Composer](http://getcomposer.org/). Run the following command:
 
-## Getting started
-
-Download the latest release and include the `Client.php` file in your `php` application. 
-
-```php
-require_once('/path/to/Paylike/Client.php');
-$privateAppKey = 'your-private-key-goes-here';
-\Paylike\Client::setKey( $privateAppKey );
+```bash
+composer require paylike/php-api
 ```
 
-
-## Capturing a transaction
-**Every operation requires a transaction id that is obtained by using the javascript [sdk](https://github.com/paylike/sdk).**
+If you don't use Composer, you can download the [latest release](https://github.com/paylike/php-api/releases) and include the `init.php` file.
 
 ```php
-	 $data     = array(
-                    'amount'   => $amount,      //value must be in cents 
-                    'currency' => $currency     //see available formats https://github.com/paylike/currencies
-                );
-     $transaction = \Paylike\Transaction::capture( $transactionId, $data );
-	// you will now have the transaction data in the $transaction variable.
+require_once('/path/to/php-api/init.php');
 ```
 
+## Dependencies
 
-## Refund a transaction
-**Every operation requires a transaction id that is obtained by using the javascript [sdk](https://github.com/paylike/sdk).**
+The bindings require the following extension in order to work properly:
 
+- [`curl`](https://secure.php.net/manual/en/book.curl.php)
+
+If you use Composer, these dependencies should be handled automatically. If you install manually, you'll want to make sure that these extensions are available.  
+If you don't want to use curl, you can create your own client to extend from `HttpClientInterface` and send that as a parameter when instantiating the `Paylike` class.
+
+## Example
 
 ```php
-	$data     = array(
-                    'amount'     => $amount,    //value must be in cents 
-                    'descriptor' => $reason     //is optional see https://github.com/paylike/descriptor for format and restrictions.
-                );
-    $transaction = \Paylike\Transaction::refund( $transactionId, $data );
-	// you will now have the transaction data in the $transaction variable.
-```
+$paylike = new \Paylike\Paylike($private_api_key);
+ 
+// fetch a card
+$cards = $paylike->cards();
+$card  = $cards->fetch($card_id);
+ 
+// capture a transaction
+$transactions = $paylike->transactions();
+$transaction  = $transactions->capture($transaction_id, array(
+    'amount'   => 100,
+    'currency' => 'EUR'
+));
+``` 
 
-## Void a transaction
-**Every operation requires a transaction id that is obtained by using the javascript [sdk](https://github.com/paylike/sdk).**
+## Methods
+```php
+$paylike = new \Paylike\Paylike($private_api_key);
+ 
+$apps = $paylike->apps();
+$apps->create($args);
+$apps->fetch();
+ 
+$merchants = $paylike->merchants();
+$merchants->create($args);
+$merchants->fetch($merchant_id);
+$merchants->update($merchant_id, $args);
+ 
+$cards = $paylike->cards();
+$cards->create($merchant_id, $args);
+$cards->fetch($card_id);
+ 
+$transactions = $paylike->transactions();
+$transactions->create($merchant_id, $args);
+$transactions->fetch($transaction_id);
+$transactions->capture($transaction_id, $args);
+$transactions->void($transaction_id, $args);
+$transactions->refund($transaction_id, $args);
+``` 
 
+## Error handling
+
+The api wrapper will throw errors when things do not fly. All errors inherit from
+`ApiException`. A very verbose example of catching all types of errors:
 
 ```php
-	$data     = array( 
-	                'amount' => $amount     //value must be in cents 
-	                );
-    $transaction = \Paylike\Transaction::void( $transactionId, $data );
-	// you will now have the transaction data in the $transaction variable.
+$paylike = new \Paylike\Paylike($private_api_key);
+try {
+    $transactions = $paylike->transactions();
+    $transactions->capture($transaction_id, array(
+        'amount'   => 100,
+        'currency' => 'EUR'
+    ));
+} catch (\Paylike\Exception\NotFound $e) {
+    // The transaction was not found
+} catch (\Paylike\Exception\InvalidRequest $e) {
+    // Bad (invalid) request - see $e->getJsonBody() for the error
+} catch (\Paylike\Exception\Forbidden $e) {
+    // You are correctly authenticated but do not have access.
+} catch (\Paylike\Exception\Unauthorized $e) {
+    // You need to provide credentials (an app's API key)
+} catch (\Paylike\Exception\Conflict $e) {
+    // Everything you submitted was fine at the time of validation, but something changed in the meantime and came into conflict with this (e.g. double-capture).
+} catch (\Paylike\Exception\ApiConnection $e) {
+    // Network error on connecting via cURL
+} catch (\Paylike\Exception\ApiException $e) {
+    // Unknown api error
+}
+``` 
+
+In most cases catching `NotFound` and `InvalidRequest` as client errors
+and logging `ApiException` would suffice.
+
+## Development
+
+Install dependencies:
+
+``` bash
+composer install
 ```
 
-## Fetch a transaction
-**Every operation requires a transaction id that is obtained by using the javascript [sdk](https://github.com/paylike/sdk).**
+## Tests
 
+Install dependencies as mentioned above (which will resolve [PHPUnit](http://packagist.org/packages/phpunit/phpunit)), then you can run the test suite:
 
-```php
-	$transaction = \Paylike\Transaction::fetch( $transactionId);
-	// you will now have the transaction data in the $transaction variable.
+```bash
+./vendor/bin/phpunit
 ```
-
-## Create a transaction
-**Every operation requires a transaction id that is obtained by using the javascript [sdk](https://github.com/paylike/sdk).**
-
-
-```php
-	 $data     = array(
-                    'amount'   => $amount,      //value must be in cents 
-                    'currency' => $currency     //see available formats https://github.com/paylike/currencies
-                );
-     $transaction = \Paylike\Transaction::create( $transactionId, $data );
-	// you will now have the transaction data in the $transaction variable.
-```
-
-## Fetch a card
-**Every operation requires a card id that is obtained by using the javascript [sdk](https://github.com/paylike/sdk).**
-
-
-```php
-	$card = \Paylike\Card::fetch( $cardId );
-	// you will now have the card data in the $card variable.
-```
+ 
