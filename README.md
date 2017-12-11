@@ -96,7 +96,7 @@ $privateAppKey = 'your-private-key-goes-here';
                     'amount'   => $amount,      //value must be in cents 
                     'currency' => $currency     //see available formats https://github.com/paylike/currencies
                 );
-     $transaction = \Paylike\Transaction::create( $transactionId, $data );
+     $transaction = \Paylike\Transaction::create( $merchantId, $data );
 	// you will now have the transaction data in the $transaction variable.
 ```
 
