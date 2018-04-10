@@ -1,11 +1,12 @@
 {
   "name": "paylike/php-api",
-  "description": "Demo",
+  "description": "PHP SDK to communicate with the Paylike HTTP api",
+  "version": "0.1.0",
   "license": "MIT",
   "authors": [
     {
       "name": "Ionut Calara",
-      "email": "ionut@derikon.com"
+      "email": "ionut.calara@gmail.com"
     }
   ],
   "minimum-stability": "dev",
