@@ -76,7 +76,7 @@ class CurlClient implements HttpClientInterface
             'Accept: application/vnd.api+json',
             'Content-Type: application/vnd.api+json'
         ));
-        curl_setopt($ch, CURLOPT_USERAGENT, 'PHP 0.2.0 (php' . phpversion() .')');
+        curl_setopt($ch, CURLOPT_USERAGENT, 'PHP 1.0.0 (php' . phpversion() .')');
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $this->verify_ssl);
         curl_setopt($ch, CURLOPT_USERPWD, ":" . $this->api_key);
         curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
