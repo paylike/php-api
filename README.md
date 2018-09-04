@@ -63,6 +63,7 @@ $merchants = $paylike->merchants();
 $merchants->create($args);
 $merchants->fetch($merchant_id);
 $merchants->update($merchant_id, $args);
+$all_merchants = $merchants->get($app_id,$limit,$before);
  
 $cards = $paylike->cards();
 $cards->create($merchant_id, $args);
@@ -74,7 +75,28 @@ $transactions->fetch($transaction_id);
 $transactions->capture($transaction_id, $args);
 $transactions->void($transaction_id, $args);
 $transactions->refund($transaction_id, $args);
+$all_transactions = $transactions->get($merchant_id,$limit,$before);
 ``` 
+
+## Pagination
+The methods that allow fetching all transactions/merchants support pagination. By default they are limited to the last 10 items.
+An example of handling pagination to fetch all available transactions:
+
+```php
+$transactions = array();
+$limit = 10;
+$before = null;
+
+do {
+    $api_transactions = $this->transactions->get($merchant_id, $limit, $before);
+    if (count($api_transactions) < $limit) {
+        $before = null;
+    } else {
+        $before = $api_transactions[$limit - 1]['id'];
+    }
+    $transactions = array_merge($transactions, $api_transactions);
+} while ($before);
+```
 
 ## Error handling
 
