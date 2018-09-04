@@ -37,4 +37,5 @@ class Apps extends Resource
 
         return $api_response->json['identity'];
     }
+
 }

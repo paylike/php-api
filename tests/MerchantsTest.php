@@ -21,14 +21,14 @@ class MerchantsTest extends BaseTest
     public function testCreate()
     {
         $merchant_id = $this->merchants->create(array(
-            'company'    => array(
+            'company' => array(
                 'country' => 'DK'
             ),
-            'currency'   => 'DKK',
-            'email'      => 'john@example.com',
-            'website'    => 'https://example.com',
+            'currency' => 'DKK',
+            'email' => 'john@example.com',
+            'website' => 'https://example.com',
             'descriptor' => 'Test Merchant Name',
-            'test'       => true,
+            'test' => true,
         ));
 
         $this->assertNotEmpty($merchant_id, 'primary key');
@@ -42,6 +42,26 @@ class MerchantsTest extends BaseTest
         $merchant = $this->merchants->fetch($merchant_id);
 
         $this->assertEquals($merchant['id'], $merchant_id, 'primary key');
+    }
+
+    public function testGetAll()
+    {
+        $app_id = $this->app_id;
+        $merchants = array();
+        $limit = 10;
+        $before = null;
+
+        do {
+            $api_merchants = $this->merchants->get($app_id, $limit, $before);
+            if (count($api_merchants) < $limit) {
+                $before = null;
+            } else {
+                $before = $api_merchants[$limit - 1]['id'];
+            }
+            $merchants = array_merge($merchants,$api_merchants);
+        } while ($before);
+
+        $this->assertGreaterThan(0, count($merchants), 'number of merchants');
     }
 
     public function testUpdate()
