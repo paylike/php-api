@@ -92,4 +92,21 @@ class Transactions extends Resource
 
         return $api_response->json['transaction'];
     }
+
+    /**
+     * @link https://github.com/paylike/api-docs#fetch-all-transactions
+     *
+     * @param $merchant_id
+     * @param int $limit
+     * @param null $before
+     */
+    public function get($merchant_id, $limit = 10, $before = null){
+        $url = 'merchants/' . $merchant_id . '/transactions?limit=' . $limit;
+        if ($before) {
+            $url .= '&before=' . $before;
+        }
+        $api_response = $this->paylike->client->request('GET', $url);
+        $merchants = $api_response->json;
+        return $merchants;
+    }
 }
