@@ -21,14 +21,14 @@ class TransactionsTest extends BaseTest
 
     public function testCreate()
     {
-        $merchant_id    = $this->merchant_id;
+        $merchant_id = $this->merchant_id;
         $transaction_id = $this->transaction_id;
 
         $new_transaction_id = $this->transactions->create($merchant_id, array(
             'transactionId' => $transaction_id,
-            'currency'      => 'EUR',
-            'amount'        => 200,
-            'custom'        => array(
+            'currency' => 'EUR',
+            'amount' => 200,
+            'custom' => array(
                 'source' => 'php client test'
             )
         ));
@@ -58,7 +58,7 @@ class TransactionsTest extends BaseTest
 
         $transaction = $this->transactions->capture($new_transaction_id, array(
             'currency' => 'EUR',
-            'amount'   => 100
+            'amount' => 100
         ));
 
         $this->assertEquals($transaction['capturedAmount'], 100,
@@ -79,7 +79,7 @@ class TransactionsTest extends BaseTest
         $new_transaction_id = $this->createNewTransactionForTest();
         $this->transactions->capture($new_transaction_id, array(
             'currency' => 'EUR',
-            'amount'   => 400
+            'amount' => 400
         ));
     }
 
@@ -89,7 +89,7 @@ class TransactionsTest extends BaseTest
 
         $this->transactions->capture($new_transaction_id, array(
             'currency' => 'EUR',
-            'amount'   => 200
+            'amount' => 200
         ));
 
         $transaction = $this->transactions->refund($new_transaction_id, array(
@@ -134,18 +134,41 @@ class TransactionsTest extends BaseTest
      */
     private function createNewTransactionForTest()
     {
-        $merchant_id    = $this->merchant_id;
+        $merchant_id = $this->merchant_id;
         $transaction_id = $this->transaction_id;
 
         $new_transaction_id = $this->transactions->create($merchant_id, array(
             'transactionId' => $transaction_id,
-            'currency'      => 'EUR',
-            'amount'        => 300,
-            'custom'        => array(
+            'currency' => 'EUR',
+            'amount' => 300,
+            'custom' => array(
                 'source' => 'php client test'
             )
         ));
 
         return $new_transaction_id;
+    }
+
+    /**
+     *
+     */
+    public function testGetAllTransactions()
+    {
+        $merchant_id = $this->merchant_id;
+        $transactions = array();
+        $limit = 10;
+        $before = null;
+
+        do {
+            $api_transactions = $this->transactions->get($merchant_id, $limit, $before);
+            if (count($api_transactions) < $limit) {
+                $before = null;
+            } else {
+                $before = $api_transactions[$limit - 1]['id'];
+            }
+            $transactions = array_merge($transactions, $api_transactions);
+        } while ($before);
+
+        $this->assertGreaterThan(0, count($transactions), 'number of transactions');
     }
 }
