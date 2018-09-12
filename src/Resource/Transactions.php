@@ -2,6 +2,8 @@
 
 namespace Paylike\Resource;
 
+use Paylike\Utils\Cursor;
+
 /**
  * Class Transactions
  *
@@ -97,16 +99,44 @@ class Transactions extends Resource
      * @link https://github.com/paylike/api-docs#fetch-all-transactions
      *
      * @param $merchant_id
-     * @param int $limit
-     * @param null $before
+     * @param array $args
+     * @return Cursor
+     * @throws \Exception
      */
-    public function get($merchant_id, $limit = 10, $before = null){
-        $url = 'merchants/' . $merchant_id . '/transactions?limit=' . $limit;
-        if ($before) {
-            $url .= '&before=' . $before;
+    public function find($merchant_id, $args = array())
+    {
+        $url = 'merchants/' . $merchant_id . '/transactions';
+        if (!isset($args['limit'])) {
+            $args['limit'] = 10;
         }
-        $api_response = $this->paylike->client->request('GET', $url);
-        $merchants = $api_response->json;
-        return $merchants;
+        $api_response = $this->paylike->client->request('GET', $url, $args);
+        $transactions = $api_response->json;
+        return new Cursor($url, $args, $transactions, $this->paylike);
+    }
+
+    /**
+     * @link https://github.com/paylike/api-docs#fetch-all-transactions
+     *
+     * @param $merchant_id
+     * @param $transaction_id
+     * @return Cursor
+     * @throws \Exception
+     */
+    public function before($merchant_id, $transaction_id)
+    {
+        return $this->find($merchant_id, array('before' => $transaction_id));
+    }
+
+    /**
+     * @link https://github.com/paylike/api-docs#fetch-all-transactions
+     *
+     * @param $merchant_id
+     * @param $transaction_id
+     * @return Cursor
+     * @throws \Exception
+     */
+    public function after($merchant_id, $transaction_id)
+    {
+        return $this->find($merchant_id, array('after' => $transaction_id));
     }
 }
