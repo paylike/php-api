@@ -13,12 +13,18 @@ class TransactionsTest extends BaseTest
      */
     protected $transactions;
 
+    /**
+     *
+     */
     public function setUp()
     {
         parent::setUp();
         $this->transactions = $this->paylike->transactions();
     }
 
+    /**
+     *
+     */
     public function testCreate()
     {
         $merchant_id = $this->merchant_id;
@@ -37,6 +43,9 @@ class TransactionsTest extends BaseTest
         $this->assertInternalType('string', $new_transaction_id, 'primary key type');
     }
 
+    /**
+     *
+     */
     public function testFetch()
     {
         $transaction_id = $this->transaction_id;
@@ -46,12 +55,18 @@ class TransactionsTest extends BaseTest
         $this->assertEquals($transaction['id'], $transaction_id, 'primary key');
     }
 
+    /**
+     *
+     */
     public function testFailFetch()
     {
         $this->setExpectedException(NotFound::class);
         $this->transactions->fetch('wrong id');
     }
 
+    /**
+     *
+     */
     public function testCapture()
     {
         $new_transaction_id = $this->createNewTransactionForTest();
@@ -72,6 +87,9 @@ class TransactionsTest extends BaseTest
         $this->assertEquals($trail[0]['amount'], 100, 'amount in capture trail');
     }
 
+    /**
+     *
+     */
     public function testCaptureBiggerAmount()
     {
         $this->setExpectedException(InvalidRequest::class);
@@ -83,6 +101,9 @@ class TransactionsTest extends BaseTest
         ));
     }
 
+    /**
+     *
+     */
     public function testRefund()
     {
         $new_transaction_id = $this->createNewTransactionForTest();
@@ -111,6 +132,9 @@ class TransactionsTest extends BaseTest
         $this->assertEquals($trail[1]['amount'], 120, 'amount in refund trail');
     }
 
+    /**
+     *
+     */
     public function testVoid()
     {
         $new_transaction_id = $this->createNewTransactionForTest();
@@ -150,25 +174,76 @@ class TransactionsTest extends BaseTest
     }
 
     /**
-     *
+     * @throws \Exception
      */
-    public function testGetAllTransactions()
+    public function testGetAllTransactionsCursor()
     {
         $merchant_id = $this->merchant_id;
-        $transactions = array();
+        $api_transactions = $this->transactions->find($merchant_id);
+        $ids = array();
+        foreach ($api_transactions as $transaction) {
+            // the transaction array grows as needed
+            $ids[] = $transaction['id'];
+        }
+
+        $this->assertGreaterThan(0, count($ids), 'number of transactions');
+    }
+
+
+    /**
+     * @throws \Exception
+     */
+    public function testGetAllTransactionsCursorOptions()
+    {
+        $merchant_id = $this->merchant_id;
         $limit = 10;
-        $before = null;
+        $after = '5b8e839d7cc76f04ecd3f733';
+        $before = '5b98deef882cf804f6108700';
+        $api_transactions = $this->transactions->find($merchant_id, array(
+            'limit' => $limit,
+            'after' => $after,
+            'before' => $before
+        ));
+        $ids = array();
+        foreach ($api_transactions as $transaction) {
+            // the transaction array grows as needed
+            $ids[] = $transaction['id'];
+        }
 
-        do {
-            $api_transactions = $this->transactions->get($merchant_id, $limit, $before);
-            if (count($api_transactions) < $limit) {
-                $before = null;
-            } else {
-                $before = $api_transactions[$limit - 1]['id'];
-            }
-            $transactions = array_merge($transactions, $api_transactions);
-        } while ($before);
+        $this->assertGreaterThan(0, count($api_transactions), 'number of transactions');
+    }
 
-        $this->assertGreaterThan(0, count($transactions), 'number of transactions');
+    /**
+     * @throws \Exception
+     */
+    public function testGetAllTransactionsCursorBefore()
+    {
+        $merchant_id = $this->merchant_id;
+        $before = '5b98deef882cf804f6108700';
+        $api_transactions = $this->transactions->before($merchant_id, $before);
+        $ids = array();
+        foreach ($api_transactions as $transaction) {
+            // the transaction array grows as needed
+            $ids[] = $transaction['id'];
+        }
+
+        $this->assertGreaterThan(0, count($api_transactions), 'number of transactions');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testGetAllTransactionsCursorAfter()
+    {
+        $merchant_id = $this->merchant_id;
+        $after = '5b8e839d7cc76f04ecd3f733';
+        $api_transactions = $this->transactions->before($merchant_id, $after);
+        $ids = array();
+        foreach ($api_transactions as $transaction) {
+            // the transaction array grows as needed
+            $ids[] = $transaction['id'];
+        }
+
+        $this->assertGreaterThan(0, count($api_transactions), 'number of transactions');
     }
 }

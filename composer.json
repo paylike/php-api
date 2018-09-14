@@ -1,7 +1,7 @@
 {
   "name": "paylike/php-api",
   "description": "PHP SDK to communicate with the Paylike HTTP api",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "authors": [
     {

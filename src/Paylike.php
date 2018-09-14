@@ -36,7 +36,8 @@ class Paylike
      * Paylike constructor.
      *
      * @param                          $api_key
-     * @param HttpClientInterface      $client
+     * @param HttpClientInterface $client
+     * @throws Exception\ApiException
      */
     public function __construct($api_key, HttpClientInterface $client = null)
     {

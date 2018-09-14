@@ -11,6 +11,9 @@ class MerchantsTest extends BaseTest
      */
     protected $merchants;
 
+    /**
+     *
+     */
     public function setUp()
     {
         parent::setUp();
@@ -18,6 +21,9 @@ class MerchantsTest extends BaseTest
     }
 
 
+    /**
+     *
+     */
     public function testCreate()
     {
         $merchant_id = $this->merchants->create(array(
@@ -35,6 +41,9 @@ class MerchantsTest extends BaseTest
         $this->assertInternalType('string', $merchant_id, 'primary key type');
     }
 
+    /**
+     *
+     */
     public function testFetch()
     {
         $merchant_id = $this->merchant_id;
@@ -44,26 +53,9 @@ class MerchantsTest extends BaseTest
         $this->assertEquals($merchant['id'], $merchant_id, 'primary key');
     }
 
-    public function testGetAll()
-    {
-        $app_id = $this->app_id;
-        $merchants = array();
-        $limit = 10;
-        $before = null;
-
-        do {
-            $api_merchants = $this->merchants->get($app_id, $limit, $before);
-            if (count($api_merchants) < $limit) {
-                $before = null;
-            } else {
-                $before = $api_merchants[$limit - 1]['id'];
-            }
-            $merchants = array_merge($merchants,$api_merchants);
-        } while ($before);
-
-        $this->assertGreaterThan(0, count($merchants), 'number of merchants');
-    }
-
+    /**
+     *
+     */
     public function testUpdate()
     {
         $merchant_id = $this->merchant_id;
@@ -71,5 +63,77 @@ class MerchantsTest extends BaseTest
         $this->merchants->update($merchant_id, array(
             'name' => 'Updated Merchant Name'
         ));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testGetAllMerchantsCursor()
+    {
+        $app_id = $this->app_id;
+        $api_merchants = $this->merchants->find($app_id);
+        $ids = array();
+        foreach ($api_merchants as $merchant) {
+            // the merchants array grows as needed
+            $ids[] = $merchant['id'];
+        }
+
+        $this->assertGreaterThan(0, count($ids), 'number of merchants');
+    }
+
+
+    /**
+     * @throws \Exception
+     */
+    public function testGetAllMerchantsCursorOptions()
+    {
+        $app_id = $this->app_id;
+        $after = '5952889e764d2754c974fe94';
+        $before = '5b8e5b8cd294fa04eb4cfbeb';
+        $api_merchants = $this->merchants->find($app_id, array(
+            'after' => $after,
+            'before' => $before
+        ));
+        $ids = array();
+        foreach ($api_merchants as $merchant) {
+            // the merchants array grows as needed
+            $ids[] = $merchant['id'];
+        }
+
+        $this->assertGreaterThan(0, count($api_merchants), 'number of merchants');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testGetAllMerchantsCursorBefore()
+    {
+        $app_id = $this->app_id;
+        $before = '5b8e5b8cd294fa04eb4cfbeb';
+        $api_merchants = $this->merchants->before($app_id, $before);
+        $ids = array();
+        foreach ($api_merchants as $merchant) {
+            // the merchants array grows as needed
+            $ids[] = $merchant['id'];
+        }
+
+        $this->assertGreaterThan(0, count($api_merchants), 'number of merchants');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testGetAllMerchantsCursorAfter()
+    {
+        $app_id = $this->app_id;
+        $after = '5952889e764d2754c974fe94';
+        $api_merchants = $this->merchants->after($app_id, $after);
+        $ids = array();
+        foreach ($api_merchants as $merchant) {
+            // the merchants array grows as needed
+            $ids[] = $merchant['id'];
+        }
+
+        $this->assertGreaterThan(0, count($api_merchants), 'number of merchants');
     }
 }

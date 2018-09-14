@@ -63,7 +63,9 @@ $merchants = $paylike->merchants();
 $merchants->create($args);
 $merchants->fetch($merchant_id);
 $merchants->update($merchant_id, $args);
-$all_merchants = $merchants->get($app_id,$limit,$before);
+$all_merchants = $merchants->find($app_id,$args);
+$some_merchants = $merchants->before($app_id,$before);
+$some_merchants = $merchants->after($app_id,$before);
  
 $cards = $paylike->cards();
 $cards->create($merchant_id, $args);
@@ -75,28 +77,13 @@ $transactions->fetch($transaction_id);
 $transactions->capture($transaction_id, $args);
 $transactions->void($transaction_id, $args);
 $transactions->refund($transaction_id, $args);
-$all_transactions = $transactions->get($merchant_id,$limit,$before);
+$all_transactions = $transactions->find($merchant_id,$args);
+$some_transactions = $transactions->before($merchant_id,$before);
+$some_transactions = $transactions->after($merchant_id,$before);
 ``` 
 
 ## Pagination
-The methods that allow fetching all transactions/merchants support pagination. By default they are limited to the last 10 items.
-An example of handling pagination to fetch all available transactions:
-
-```php
-$transactions = array();
-$limit = 10;
-$before = null;
-
-do {
-    $api_transactions = $this->transactions->get($merchant_id, $limit, $before);
-    if (count($api_transactions) < $limit) {
-        $before = null;
-    } else {
-        $before = $api_transactions[$limit - 1]['id'];
-    }
-    $transactions = array_merge($transactions, $api_transactions);
-} while ($before);
-```
+The methods that return multiple merchants/transactions (find,after,before) use cursors, so you don't need to worry about pagination, you can access any index, or iterate all the items, this is handled in the background.
 
 ## Error handling
 
