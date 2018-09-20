@@ -246,4 +246,24 @@ class TransactionsTest extends BaseTest
 
         $this->assertGreaterThan(0, count($api_transactions), 'number of transactions');
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testGetAllTransactionsFilter()
+    {
+        $merchant_id = $this->merchant_id;
+        $api_transactions = $this->transactions->find($merchant_id, array(
+            'filter' => array(
+                'test' => true
+            ),
+        ));
+        $ids = array();
+        foreach ($api_transactions as $transaction) {
+            // the transaction array grows as needed
+            $ids[] = $transaction['id'];
+        }
+
+        $this->assertGreaterThan(0, count($api_transactions), 'number of transactions');
+    }
 }
