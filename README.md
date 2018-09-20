@@ -80,6 +80,19 @@ $transactions->refund($transaction_id, $args);
 $all_transactions = $transactions->find($merchant_id,$args);
 $some_transactions = $transactions->before($merchant_id,$before);
 $some_transactions = $transactions->after($merchant_id,$before);
+
+// explicit args
+$limit = 10;
+$after = '5b8e839d7cc76f04ecd3f733';
+$before = '5b98deef882cf804f6108700';
+$api_transactions = $transactions->find($merchant_id, array(
+    'limit' => $limit,
+    'after' => $after,
+    'before' => $before,
+    'filter' => array(
+    	'successful' => true
+    )
+));
 ``` 
 
 ## Pagination
