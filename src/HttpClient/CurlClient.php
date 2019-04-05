@@ -217,8 +217,8 @@ class CurlClient implements HttpClientInterface
         switch ($response_code) {
             case 400:
                 // format for the errors:
-                // - [{"field":"amount","message":"Can refund at most GBP 0"}]
-                // - [{"code":2,"text":"Invalid card details", "client": true, "merchant": false}]
+                // - {"field":"amount","message":"Can refund at most GBP 0"}
+                // - {"code":2,"text":"Invalid card details", "client": true, "merchant": false}
                 $message = "Bad (invalid) request";
                 // @TODO - extract error parsing logic
                 if ($json_resp && is_array($json_resp)) {
