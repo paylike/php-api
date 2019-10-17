@@ -5,7 +5,7 @@ namespace Paylike\Tests;
 use Paylike\Data\Currencies;
 use Paylike\Exception\NotFound;
 
-class CardsTest extends BaseTest {
+class CurrenciesTest extends BaseTest {
 	/**
 	 * @var Currencies
 	 */

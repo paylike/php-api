@@ -3,7 +3,7 @@
 namespace Paylike\Tests;
 
 use Paylike\Exception\NotFound;
-use Paylike\Resource\Cards;
+use Paylike\Endpoint\Cards;
 
 class CardsTest extends BaseTest
 {

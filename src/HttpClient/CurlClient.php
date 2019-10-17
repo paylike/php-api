@@ -242,7 +242,7 @@ class CurlClient implements HttpClientInterface
                     $json_resp,
                     $response_headers);
             case 404:
-                throw new NotFound("Resource not found.",
+                throw new NotFound("Endpoint not found.",
                     $response_code, $response_body,
                     $json_resp,
                     $response_headers);

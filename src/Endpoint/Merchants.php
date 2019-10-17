@@ -1,15 +1,15 @@
 <?php
 
-namespace Paylike\Resource;
+namespace Paylike\Endpoint;
 
 use Paylike\Utils\Cursor;
 
 /**
  * Class Merchants
  *
- * @package Paylike\Resource
+ * @package Paylike\Endpoint
  */
-class Merchants extends Resource
+class Merchants extends Endpoint
 {
     /**
      * @link https://github.com/paylike/api-docs#create-a-merchant

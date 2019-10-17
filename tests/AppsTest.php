@@ -2,7 +2,7 @@
 
 namespace Paylike\Tests;
 
-use Paylike\Resource\Apps;
+use Paylike\Endpoint\Apps;
 
 class AppsTest extends BaseTest
 {
