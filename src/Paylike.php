@@ -4,10 +4,10 @@ namespace Paylike;
 
 use Paylike\HttpClient\HttpClientInterface;
 use Paylike\HttpClient\CurlClient;
-use Paylike\Resource\Apps;
-use Paylike\Resource\Merchants;
-use Paylike\Resource\Transactions;
-use Paylike\Resource\Cards;
+use Paylike\Endpoint\Apps;
+use Paylike\Endpoint\Merchants;
+use Paylike\Endpoint\Transactions;
+use Paylike\Endpoint\Cards;
 
 /**
  * Class Paylike

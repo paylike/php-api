@@ -4,7 +4,7 @@ namespace Paylike\Tests;
 
 use Paylike\Exception\InvalidRequest;
 use Paylike\Exception\NotFound;
-use Paylike\Resource\Transactions;
+use Paylike\Endpoint\Transactions;
 
 class TransactionsTest extends BaseTest
 {

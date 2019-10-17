@@ -1,13 +1,13 @@
 <?php
 
-namespace Paylike\Resource;
+namespace Paylike\Endpoint;
 
 /**
- * Class Resource
+ * Class Endpoint
  *
- * @package Paylike\Resource
+ * @package Paylike\Endpoint
  */
-abstract class Resource
+abstract class Endpoint
 {
     /**
      * @var \Paylike\Paylike
@@ -15,7 +15,7 @@ abstract class Resource
     protected $paylike;
 
     /**
-     * Resource constructor.
+     * Endpoint constructor.
      *
      * @param $paylike
      */

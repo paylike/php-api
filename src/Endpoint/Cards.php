@@ -1,13 +1,13 @@
 <?php
 
-namespace Paylike\Resource;
+namespace Paylike\Endpoint;
 
 /**
  * Class Cards
  *
- * @package Paylike\Resource
+ * @package Paylike\Endpoint
  */
-class Cards extends Resource
+class Cards extends Endpoint
 {
     /**
      * @link https://github.com/paylike/api-docs#save-a-card

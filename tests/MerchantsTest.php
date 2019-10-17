@@ -2,7 +2,7 @@
 
 namespace Paylike\Tests;
 
-use Paylike\Resource\Merchants;
+use Paylike\Endpoint\Merchants;
 
 class MerchantsTest extends BaseTest
 {

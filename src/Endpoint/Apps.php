@@ -1,13 +1,13 @@
 <?php
 
-namespace Paylike\Resource;
+namespace Paylike\Endpoint;
 
 /**
  * Class Apps
  *
- * @package Paylike\Resource
+ * @package Paylike\Endpoint
  */
-class Apps extends Resource
+class Apps extends Endpoint
 {
     /**
      * @link https://github.com/paylike/api-docs#create-an-app

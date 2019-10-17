@@ -8,12 +8,12 @@ require(dirname(__FILE__) . '/src/Exception/InvalidRequest.php');
 require(dirname(__FILE__) . '/src/Exception/NotFound.php');
 require(dirname(__FILE__) . '/src/Exception/Unauthorized.php');
 
-// Resource
-require(dirname(__FILE__) . '/src/Resource/Resource.php');
-require(dirname(__FILE__) . '/src/Resource/Apps.php');
-require(dirname(__FILE__) . '/src/Resource/Merchants.php');
-require(dirname(__FILE__) . '/src/Resource/Transactions.php');
-require(dirname(__FILE__) . '/src/Resource/Cards.php');
+// Endpoint
+require( dirname( __FILE__ ) . '/src/Endpoint/Endpoint.php' );
+require( dirname( __FILE__ ) . '/src/Endpoint/Apps.php' );
+require( dirname( __FILE__ ) . '/src/Endpoint/Merchants.php' );
+require( dirname( __FILE__ ) . '/src/Endpoint/Transactions.php' );
+require( dirname( __FILE__ ) . '/src/Endpoint/Cards.php' );
 
 // Response
 require(dirname(__FILE__) . '/src/Response/ApiResponse.php');
