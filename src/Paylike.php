@@ -31,6 +31,8 @@ class Paylike
      */
     private $api_key;
 
+    private $version = '1.0.6';
+
 
     /**
      * Paylike constructor.
@@ -85,5 +87,12 @@ class Paylike
     public function cards()
     {
         return new Cards($this);
+    }
+
+    /**
+     * @return string
+     */
+    public function getVersion(){
+        return $this->version;
     }
 }

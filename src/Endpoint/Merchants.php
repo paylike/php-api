@@ -2,6 +2,7 @@
 
 namespace Paylike\Endpoint;
 
+use Paylike\Endpoint\Merchant\Lines;
 use Paylike\Utils\Cursor;
 
 /**
@@ -100,5 +101,13 @@ class Merchants extends Endpoint
     public function after($app_id, $merchant_id)
     {
         return $this->find($app_id, array('after' => $merchant_id));
+    }
+
+    /**
+     * return Lines
+     */
+    public function lines()
+    {
+        return new Lines($this->paylike);
     }
 }
