@@ -22,4 +22,5 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
         $this->transaction_id = "5da8272132aad22568a511b7";
         $this->merchant_id    = "594d3c455be12d547cbe2ebe";
     }
+
 }
