@@ -1,6 +1,6 @@
 {
   "name": "paylike/php-api",
-  "description": "PHP SDK to communicate with the Paylike HTTP api",
+  "description": "PHP SDK to communicate with the Paylike HTTP API",
   "version": "1.0.5",
   "license": "MIT",
   "authors": [
@@ -12,12 +12,16 @@
   "minimum-stability": "dev",
   "autoload": {
     "psr-4": {
-      "Paylike\\": "src",
-      "Paylike\\Tests\\": "tests"
+      "Paylike\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Paylike\\Tests\\": "tests/"
     }
   },
   "require": {
-    "php": ">=5.3",
+    "php": ">=5.3.3",
     "ext-curl": "*"
   },
   "require-dev": {
