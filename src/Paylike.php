@@ -31,7 +31,7 @@ class Paylike
      */
     private $api_key;
 
-    private $version = '1.0.7';
+    private $version = '1.0.8';
 
 
     /**

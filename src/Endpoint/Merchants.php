@@ -110,4 +110,12 @@ class Merchants extends Endpoint
     {
         return new Lines($this->paylike);
     }
+
+    /**
+     * return Lines
+     */
+    public function apps()
+    {
+        return new \Paylike\Endpoint\Merchant\Apps($this->paylike);
+    }
 }

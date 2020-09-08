@@ -3,6 +3,7 @@
 namespace Paylike\Tests;
 
 use Paylike\Endpoint\Merchant\Lines;
+use Paylike\Paylike;
 
 class MerchantsLinesTest extends BaseTest
 {
@@ -14,7 +15,8 @@ class MerchantsLinesTest extends BaseTest
     /**
      *
      */
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->lines = $this->paylike->merchants()->lines();
     }
@@ -23,10 +25,11 @@ class MerchantsLinesTest extends BaseTest
     /**
      * @throws \Exception
      */
-    public function testGetAllLinesCursor() {
+    public function testGetAllLinesCursor()
+    {
         $merchant_id = $this->merchant_id;
-        $api_lines   = $this->lines->find($merchant_id);
-        $ids         = array();
+        $api_lines = $this->lines->find($merchant_id);
+        $ids = array();
         foreach ($api_lines as $line) {
             // the lines array grows as needed
             $ids[] = $line['id'];
@@ -38,11 +41,12 @@ class MerchantsLinesTest extends BaseTest
     /**
      * @throws \Exception
      */
-    public function testGetAllLinesCursorBefore() {
+    public function testGetAllLinesCursorBefore()
+    {
         $merchant_id = $this->merchant_id;
-        $before        = '5da8594efd0c53603c7bb3a5';
+        $before = '5da8594efd0c53603c7bb3a5';
         $api_lines = $this->lines->before($merchant_id, $before);
-        $ids           = array();
+        $ids = array();
         foreach ($api_lines as $line) {
             // the lines array grows as needed
             $ids[] = $line['id'];
@@ -54,11 +58,12 @@ class MerchantsLinesTest extends BaseTest
     /**
      * @throws \Exception
      */
-    public function testGetAllMerchantsCursorAfter() {
+    public function testGetAllMerchantsCursorAfter()
+    {
         $merchant_id = $this->merchant_id;
-        $after        = '5da8594efd0c53603c7bb3a5';
+        $after = '5da8594efd0c53603c7bb3a5';
         $api_lines = $this->lines->after($merchant_id, $after);
-        $ids           = array();
+        $ids = array();
         foreach ($api_lines as $line) {
             // the lines array grows as needed
             $ids[] = $line['id'];
@@ -66,4 +71,5 @@ class MerchantsLinesTest extends BaseTest
 
         $this->assertGreaterThan(0, count($api_lines), 'number of lines');
     }
+    
 }
