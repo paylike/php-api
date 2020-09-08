@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Paylike client (PHP)
 
+## 1.0.8 - 2020-09-8
+### Added
+- Add merchant apps support.
+
 ## 1.0.7 - 2020-09-2
 ### Changed
 - Update composer to separate dev dependencies and update php version requirement.
