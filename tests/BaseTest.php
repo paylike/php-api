@@ -3,8 +3,9 @@
 namespace Paylike\Tests;
 
 use Paylike\Paylike;
+use PHPUnit\Framework\TestCase;
 
-abstract class BaseTest extends \PHPUnit_Framework_TestCase
+abstract class BaseTest extends TestCase
 {
     /**
      * @var Paylike
@@ -15,12 +16,12 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
     protected $transaction_id;
     protected $merchant_id;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->paylike        = new Paylike("dbcf01af-8667-4967-9791-56101ca87ac8");
-        $this->app_id         = "594d3cde5be12d547cbe2ec2";
-        $this->transaction_id = "5da8272132aad22568a511b7";
-        $this->merchant_id    = "594d3c455be12d547cbe2ebe";
+        $this->paylike        = new Paylike("a61437c5-1043-443b-ac3a-fe49c2b58481");
+        $this->app_id         = "601268435b1f7e3d1ebf8271";
+        $this->transaction_id = "63ca94a11ec6fb693b1da497";
+        $this->merchant_id    = "601267ebf700a44f17ee4fbf";
     }
 
 }

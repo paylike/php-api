@@ -55,7 +55,7 @@ class Merchants extends Endpoint
     {
         $url = 'merchants/' . $merchant_id;
 
-        $this->paylike->client->request('PUT', $url, $args);
+        return $this->paylike->client->request('PUT', $url, $args);
     }
 
     /**

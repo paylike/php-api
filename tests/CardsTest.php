@@ -12,7 +12,7 @@ class CardsTest extends BaseTest
      */
     protected $cards;
 
-    public function setUp()
+    public function setUp():void
     {
         parent::setUp();
         $this->cards = $this->paylike->cards();
@@ -29,7 +29,7 @@ class CardsTest extends BaseTest
         ));
 
         $this->assertNotEmpty($card_id, 'primary key');
-        $this->assertInternalType('string', $card_id, 'primary key type');
+        $this->assertIsString($card_id, 'primary key type');
     }
 
     public function testFetch()
@@ -48,7 +48,7 @@ class CardsTest extends BaseTest
 
     public function testFailFetch()
     {
-        $this->setExpectedException(NotFound::class);
-        $this->cards->fetch('wrong id');
+        $this->expectException(NotFound::class);
+        $this->cards->fetch('wrong_id');
     }
 }

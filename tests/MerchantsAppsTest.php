@@ -15,7 +15,7 @@ class MerchantsAppsTest extends BaseTest
     /**
      *
      */
-    public function setUp()
+    public function setUp():void
     {
         parent::setUp();
         $this->apps = $this->paylike->merchants()->apps();

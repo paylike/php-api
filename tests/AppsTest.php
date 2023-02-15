@@ -11,7 +11,7 @@ class AppsTest extends BaseTest
      */
     protected $apps;
 
-    public function setUp()
+    public function setUp():void
     {
         parent::setUp();
         $this->apps = $this->paylike->apps();
@@ -31,6 +31,6 @@ class AppsTest extends BaseTest
     {
         $app = $this->apps->fetch();
 
-        $this->assertEquals($app['id'], $this->app_id, 'app id');
+        $this->assertEquals($this->app_id, $app['id'], 'app id');
     }
 }

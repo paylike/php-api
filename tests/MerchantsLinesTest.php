@@ -15,7 +15,7 @@ class MerchantsLinesTest extends BaseTest
     /**
      *
      */
-    public function setUp()
+    public function setUp():void
     {
         parent::setUp();
         $this->lines = $this->paylike->merchants()->lines();
@@ -44,7 +44,7 @@ class MerchantsLinesTest extends BaseTest
     public function testGetAllLinesCursorBefore()
     {
         $merchant_id = $this->merchant_id;
-        $before = '5da8594efd0c53603c7bb3a5';
+        $before = '63ca90ee5c35c032ce597a3e';
         $api_lines = $this->lines->before($merchant_id, $before);
         $ids = array();
         foreach ($api_lines as $line) {
@@ -71,5 +71,5 @@ class MerchantsLinesTest extends BaseTest
 
         $this->assertGreaterThan(0, count($api_lines), 'number of lines');
     }
-    
+
 }

@@ -14,7 +14,7 @@ class MerchantsTest extends BaseTest
     /**
      *
      */
-    public function setUp()
+    public function setUp():void
     {
         parent::setUp();
         $this->merchants = $this->paylike->merchants();
@@ -38,7 +38,7 @@ class MerchantsTest extends BaseTest
         ));
 
         $this->assertNotEmpty($merchant_id, 'primary key');
-        $this->assertInternalType('string', $merchant_id, 'primary key type');
+        $this->assertIsString( $merchant_id, 'primary key type');
     }
 
     /**
@@ -60,9 +60,12 @@ class MerchantsTest extends BaseTest
     {
         $merchant_id = $this->merchant_id;
 
-        $this->merchants->update($merchant_id, array(
+        $response = $this->merchants->update($merchant_id, array(
             'name' => 'Updated Merchant Name'
         ));
+
+		$this->assertNotEmpty($response, 'response');
+
     }
 
     /**
@@ -88,8 +91,8 @@ class MerchantsTest extends BaseTest
     public function testGetAllMerchantsCursorOptions()
     {
         $app_id = $this->app_id;
-        $after = '5952889e764d2754c974fe94';
-        $before = '5b8e5b8cd294fa04eb4cfbeb';
+        $after = '601267ebf700a44f17ee4fbf';
+        $before = '63ea11e29b99b157051e4455';
         $api_merchants = $this->merchants->find($app_id, array(
             'after' => $after,
             'before' => $before
@@ -109,7 +112,7 @@ class MerchantsTest extends BaseTest
     public function testGetAllMerchantsCursorBefore()
     {
         $app_id = $this->app_id;
-        $before = '5b8e5b8cd294fa04eb4cfbeb';
+        $before = '63ea11e29b99b157051e4455';
         $api_merchants = $this->merchants->before($app_id, $before);
         $ids = array();
         foreach ($api_merchants as $merchant) {
